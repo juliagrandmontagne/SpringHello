@@ -1,5 +1,5 @@
 package fr.diginamic.hello.controleurs;
-import fr.diginamic.hello.HelloService;
+import fr.diginamic.hello.service.HelloService;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
