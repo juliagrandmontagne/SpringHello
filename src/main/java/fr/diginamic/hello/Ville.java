@@ -27,7 +27,7 @@ public class Ville {
     public Ville() {}
 
     // Constructeur avec paramètres
-    public Ville(String nom, int population, Departement departement) {
+    public Ville(String nom, int population,Departement departement) {
         this.nom = nom;
         this.population = population;
         this.departement = departement;
