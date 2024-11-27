@@ -1,7 +1,7 @@
 package fr.diginamic.hello.service;
 
 import fr.diginamic.hello.Departement;
-import fr.diginamic.hello.DepartementDAO;
+import fr.diginamic.hello.DepartementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,35 +12,33 @@ import java.util.Optional;
 public class DepartementService {
 
     @Autowired
-    private DepartementDAO departementDao;
+    private DepartementRepository departementRepository;
 
     public List<Departement> getAllDepartements() {
-        return departementDao.findAll();
+        return departementRepository.findAll();
     }
 
     public Optional<Departement> getDepartementById(Long id) {
-        return departementDao.findById(id);
+        return departementRepository.findById(id);
     }
 
     public Optional<Departement> getDepartementByCode(String code) {
-        return departementDao.findByCode(code);
+        return departementRepository.findByCode(code);
     }
 
     public Departement addDepartement(Departement departement) {
-        return departementDao.save(departement);
+        return departementRepository.save(departement);
     }
 
     public Departement updateDepartement(Long id, Departement updatedDepartement) {
-        return departementDao.findById(id)
-                .map(departement -> {
-                    departement.setCode(updatedDepartement.getCode());
-                    departement.setNom(updatedDepartement.getNom());
-                    return departementDao.save(departement);
-                })
-                .orElse(null);
+        return departementRepository.findById(id).map(departement -> {
+            departement.setCode(updatedDepartement.getCode());
+            departement.setNom(updatedDepartement.getNom());
+            return departementRepository.save(departement);
+        }).orElse(null);
     }
 
     public void deleteDepartement(Long id) {
-        departementDao.deleteById(id);
+        departementRepository.deleteById(id);
     }
 }

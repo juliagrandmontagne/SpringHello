@@ -3,6 +3,7 @@ import fr.diginamic.hello.Ville;
 import fr.diginamic.hello.VilleRepository;
 import fr.diginamic.hello.service.VilleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
@@ -13,40 +14,47 @@ import java.util.List;
 @RequestMapping("ville")
 public class VilleControleur {
 
-    @Autowired
-    private VilleRepository villeRepository;
+    private final VilleService villeService;
 
-    @GetMapping
-    public List<Ville> getAllVilles(@RequestParam(defaultValue = "0") int page,
-                                    @RequestParam(defaultValue = "10") int size) {
+    public VilleControleur(VilleService villeService) {
+        this.villeService = villeService;
+    }
+
+    @GetMapping("/pagination")
+    public Page<Ville> getPaginatedVilles(@RequestParam(defaultValue = "0") int page,
+                                          @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return villeRepository.findAll(pageable).getContent();
+        return villeService.getAllVilles(pageable);
     }
 
-    @GetMapping("/nom/{nom}")
-    public List<Ville> getVilleByNom(@PathVariable String nom) {
-        return villeRepository.findByNomStartingWith(nom);
+    @GetMapping("/search-by-nom")
+    public Page<Ville> searchVillesByNom(@RequestParam String nom,
+                                         @RequestParam(defaultValue = "0") int page,
+                                         @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return villeService.searchVillesByNom(nom, pageable);
     }
 
-    @GetMapping("/population/min/{min}")
-    public List<Ville> getVilleByMinPopulation(@PathVariable int min) {
-        return villeRepository.findByPopulationGreaterThan(min);
+    @GetMapping("/{departementId}/villes")
+    public Page<Ville> getVillesByPopulationRange(
+            @PathVariable Long departementId,
+            @RequestParam int min,
+            @RequestParam int max,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        // Crée un objet Pageable avec les paramètres de pagination
+        Pageable pageable = PageRequest.of(page, size);
+
+        // Appelle la méthode avec tous les paramètres requis
+        return villeService.getVillesByPopulationRange(departementId, min, max, pageable);
     }
 
-    @GetMapping("/population/range")
-    public List<Ville> getVillesByPopulationRange(@RequestParam int min, @RequestParam int max) {
-        return villeRepository.findByPopulationBetween(min, max);
-    }
-
-    @GetMapping("/departement/{departementId}/population/min/{min}")
-    public List<Ville> getVillesByDepartementAndMinPopulation(@PathVariable Long departementId,
-                                                              @PathVariable int min) {
-        return villeRepository.findByDepartementIdAndPopulationGreaterThan(departementId, min);
-    }
-
-    @GetMapping("/departement/{departementId}/top")
-    public List<Ville> getTopNVilles(@PathVariable Long departementId, @RequestParam int n) {
-        Pageable pageable = PageRequest.of(0, n);
-        return villeRepository.findByDepartementIdOrderByPopulationDesc(departementId, pageable);
+    @GetMapping("/search-by-population")
+    public Page<Ville> searchVillesByPopulation(@RequestParam int minPopulation,
+                                                @RequestParam(defaultValue = "0") int page,
+                                                @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return villeService.searchVillesByPopulation(minPopulation, pageable);
     }
 }
+
