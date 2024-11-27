@@ -1,7 +1,10 @@
 package fr.diginamic.hello.controleurs;
 import fr.diginamic.hello.Ville;
+import fr.diginamic.hello.VilleRepository;
 import fr.diginamic.hello.service.VilleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,35 +14,39 @@ import java.util.List;
 public class VilleControleur {
 
     @Autowired
-    private VilleService villeService;
+    private VilleRepository villeRepository;
 
     @GetMapping
-    public List<Ville> getAllVilles() {
-        return villeService.getAllVilles();
-    }
-
-    @GetMapping("/{id}")
-    public Ville getVilleById(@PathVariable int id) {
-        return villeService.getVilleById(id);
+    public List<Ville> getAllVilles(@RequestParam(defaultValue = "0") int page,
+                                    @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return villeRepository.findAll(pageable).getContent();
     }
 
     @GetMapping("/nom/{nom}")
-    public Ville getVilleByNom(@PathVariable String nom) {
-        return villeService.getVilleByNom(nom);
+    public List<Ville> getVilleByNom(@PathVariable String nom) {
+        return villeRepository.findByNomStartingWith(nom);
     }
 
-    @PostMapping
-    public List<Ville> addVille(@RequestBody Ville ville) {
-        return villeService.addVille(ville);
+    @GetMapping("/population/min/{min}")
+    public List<Ville> getVilleByMinPopulation(@PathVariable int min) {
+        return villeRepository.findByPopulationGreaterThan(min);
     }
 
-    @PutMapping("/{id}")
-    public List<Ville> updateVille(@PathVariable int id, @RequestBody Ville ville) {
-        return villeService.updateVille(id, ville);
+    @GetMapping("/population/range")
+    public List<Ville> getVillesByPopulationRange(@RequestParam int min, @RequestParam int max) {
+        return villeRepository.findByPopulationBetween(min, max);
     }
 
-    @DeleteMapping("/{id}")
-    public List<Ville> deleteVille(@PathVariable int id) {
-        return villeService.deleteVille(id);
+    @GetMapping("/departement/{departementId}/population/min/{min}")
+    public List<Ville> getVillesByDepartementAndMinPopulation(@PathVariable Long departementId,
+                                                              @PathVariable int min) {
+        return villeRepository.findByDepartementIdAndPopulationGreaterThan(departementId, min);
+    }
+
+    @GetMapping("/departement/{departementId}/top")
+    public List<Ville> getTopNVilles(@PathVariable Long departementId, @RequestParam int n) {
+        Pageable pageable = PageRequest.of(0, n);
+        return villeRepository.findByDepartementIdOrderByPopulationDesc(departementId, pageable);
     }
 }
