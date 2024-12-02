@@ -1,9 +1,8 @@
 package fr.diginamic.hello;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class Departement {
@@ -12,9 +11,13 @@ public class Departement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     private String code;
 
     private String nom;
+
+    @OneToMany(mappedBy = "departement") // Relation bidirectionnelle
+    private List<Ville> villes;
 
     // Constructeurs
     public Departement() {}
@@ -47,6 +50,14 @@ public class Departement {
 
     public void setNom(String nom) {
         this.nom = nom;
+    }
+
+    public List<Ville> getVilles() {
+        return villes;
+    }
+
+    public void setVilles(List<Ville> villes) {
+        this.villes = villes;
     }
 
     @Override

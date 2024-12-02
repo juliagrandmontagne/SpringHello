@@ -24,4 +24,6 @@ public interface VilleRepository extends JpaRepository<Ville, Integer> {
 
     // Les n villes les plus peuplées d’un département donné
     List<Ville> findByDepartementIdOrderByPopulationDesc(Long departementId, Pageable pageable);
+
+    boolean existsByNomAndDepartementId(String nom, Long departementId);
 }
