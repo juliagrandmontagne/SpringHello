@@ -1,5 +1,11 @@
 package fr.diginamic.hello.dto;
 
+import fr.diginamic.hello.Ville;
+import fr.diginamic.hello.VilleMapper;
+import fr.diginamic.hello.VilleRepository;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class VilleDto {
     private String codeVille;
     private int nombreHabitants;
@@ -16,6 +22,14 @@ public class VilleDto {
         this.nomDepartement = nomDepartement;
     }
 
+    public static VilleDto toDto(Ville ville) {
+        VilleDto dto = new VilleDto();
+//        dto.setNom(ville.getNom());
+//        dto.setPopulation(ville.getPopulation());
+        dto.setCodeDepartement(ville.getDepartement().getCode());
+        dto.setNomDepartement(ville.getDepartement().getNom());
+        return dto;
+    }
     // Getters et Setters
     public String getCodeVille() {
         return codeVille;

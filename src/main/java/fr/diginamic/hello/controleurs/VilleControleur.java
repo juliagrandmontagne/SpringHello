@@ -5,13 +5,17 @@ import fr.diginamic.hello.VilleRepository;
 import fr.diginamic.hello.VilleValidationException;
 import fr.diginamic.hello.dto.VilleDto;
 import fr.diginamic.hello.service.VilleService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
+import java.io.PrintWriter;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("ville")
@@ -61,6 +65,50 @@ public class VilleControleur {
         Pageable pageable = PageRequest.of(page, size);
         return villeService.searchVillesByPopulation(minPopulation, pageable).map(VilleMapper::toDto);
     }
+    @GetMapping("/export-csv")
+    public void exportToCsv(@RequestParam int minPopulation, HttpServletResponse response) throws Exception {
+        // Définir les en-têtes HTTP pour le fichier CSV
+        response.setContentType("text/csv");
+        response.setHeader("Content-Disposition", "attachment; filename=\"villes.csv\"");
+
+        // Passer un Pageable pour récupérer toutes les villes
+        Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE); // Pas de limite de pagination
+        List<Ville> villes = villeService.searchVillesByPopulation(minPopulation, pageable).getContent();
+
+        // Écriture du fichier CSV
+        try (PrintWriter writer = response.getWriter()) {
+            writer.println("Nom de la ville,Nombre d'habitants,Code département,Nom du département");
+
+            for (Ville ville : villes) {
+                // Récupérer le nom du département via l'API externe
+                String apiUrl = "https://geo.api.gouv.fr/departements/" + ville.getDepartement().getCode() + "?fields=nom,code,codeRegion";
+                String nomDepartement = fetchNomDepartement(apiUrl);
+
+                // Écrire une ligne pour chaque ville
+                writer.printf("%s,%d,%s,%s%n",
+                        ville.getNom(),
+                        ville.getPopulation(),
+                        ville.getDepartement().getCode(),
+                        nomDepartement
+                );
+            }
+        }
+    }
+
+    // Méthode utilitaire pour récupérer le nom du département depuis l'API externe
+    private String fetchNomDepartement(String apiUrl) {
+        RestTemplate restTemplate = new RestTemplate();
+        try {
+            // Effectuer une requête GET à l'API externe
+            Map<String, String> response = restTemplate.getForObject(apiUrl, Map.class);
+            return response != null ? response.get("nom") : "Inconnu";
+        } catch (Exception e) {
+            return "Inconnu"; // Retourner "Inconnu" si une erreur survient
+        }
+    }
+
+//    }
+
 }
 
 
