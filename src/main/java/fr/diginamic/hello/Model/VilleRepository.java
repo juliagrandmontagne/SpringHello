@@ -1,4 +1,4 @@
-package fr.diginamic.hello;
+package fr.diginamic.hello.Model;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

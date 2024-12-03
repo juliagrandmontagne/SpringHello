@@ -1,12 +1,10 @@
 package fr.diginamic.hello.controleurs;
-import fr.diginamic.hello.Ville;
-import fr.diginamic.hello.VilleMapper;
-import fr.diginamic.hello.VilleRepository;
+import fr.diginamic.hello.Model.Ville;
+import fr.diginamic.hello.Model.VilleMapper;
 import fr.diginamic.hello.VilleValidationException;
 import fr.diginamic.hello.dto.VilleDto;
 import fr.diginamic.hello.service.VilleService;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

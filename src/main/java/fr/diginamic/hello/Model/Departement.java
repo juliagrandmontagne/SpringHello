@@ -1,4 +1,4 @@
-package fr.diginamic.hello;
+package fr.diginamic.hello.Model;
 
 import jakarta.persistence.*;
 

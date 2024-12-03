@@ -1,6 +1,9 @@
 package fr.diginamic.hello.controleurs;
 
 import fr.diginamic.hello.*;
+import fr.diginamic.hello.Model.Departement;
+import fr.diginamic.hello.Model.DepartementMapper;
+import fr.diginamic.hello.Model.VilleMapper;
 import fr.diginamic.hello.dto.DepartementDto;
 import fr.diginamic.hello.dto.VilleDto;
 import fr.diginamic.hello.service.DepartementService;

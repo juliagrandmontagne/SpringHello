@@ -1,5 +1,4 @@
-package fr.diginamic.hello;
-import fr.diginamic.hello.Departement;
+package fr.diginamic.hello.Model;
 import fr.diginamic.hello.dto.DepartementDto;
 
 public class DepartementMapper {

@@ -1,10 +1,6 @@
 package fr.diginamic.hello.dto;
 
-import fr.diginamic.hello.Ville;
-import fr.diginamic.hello.VilleMapper;
-import fr.diginamic.hello.VilleRepository;
-import java.util.List;
-import java.util.stream.Collectors;
+import fr.diginamic.hello.Model.Ville;
 
 public class VilleDto {
     private String codeVille;

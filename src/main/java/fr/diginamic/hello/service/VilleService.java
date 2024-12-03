@@ -1,10 +1,8 @@
 package fr.diginamic.hello.service;
 
-import fr.diginamic.hello.FunctionalException;
-import fr.diginamic.hello.Ville;
-import fr.diginamic.hello.VilleRepository;
+import fr.diginamic.hello.Model.Ville;
+import fr.diginamic.hello.Model.VilleRepository;
 import fr.diginamic.hello.VilleValidationException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

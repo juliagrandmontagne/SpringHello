@@ -1,7 +1,7 @@
 package fr.diginamic.hello.service;
 
-import fr.diginamic.hello.Departement;
-import fr.diginamic.hello.DepartementRepository;
+import fr.diginamic.hello.Model.Departement;
+import fr.diginamic.hello.Model.DepartementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

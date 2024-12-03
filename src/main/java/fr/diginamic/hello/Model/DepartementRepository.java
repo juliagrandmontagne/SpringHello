@@ -1,4 +1,4 @@
-package fr.diginamic.hello;
+package fr.diginamic.hello.Model;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

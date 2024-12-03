@@ -1,6 +1,5 @@
-package fr.diginamic.hello;
+package fr.diginamic.hello.Model;
 
-import fr.diginamic.hello.Departement;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
